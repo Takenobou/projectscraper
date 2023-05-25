@@ -46,5 +46,7 @@ The web scraping part of the application requires authentication to access the u
 ```env
 UNI_USERNAME=your_username
 UNI_PASSWORD=your_password
+MAIN_URL=proposal_list_page
+PROJECT_BASE_URL=proposal_base_url
 ```
 Make sure to replace 'your_username' and 'your_password' with your actual username and password.
