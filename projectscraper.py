@@ -11,11 +11,15 @@ load_dotenv()
 # Get the username and password
 username = os.getenv('UNI_USERNAME')
 password = os.getenv('UNI_PASSWORD')
+main_url = os.getenv('MAIN_URL')
+project_base_url = os.getenv('PROJECT_BASE_URL')
+
 
 def get_web_page(url):
     print(f'Fetching page: {url}')
     response = requests.get(url, auth=(username, password), timeout=5)
     return BeautifulSoup(response.text, 'html.parser')
+
 
 def get_project_links(soup):
     # Find the ordered list by id
@@ -34,7 +38,7 @@ def get_project_links(soup):
             # If an anchor tag exists
             if a:
                 # Get the link and text
-                link = 'https://campus.cs.le.ac.uk/teaching/proposals/' + a['href']
+                link = project_base_url + a['href']
                 text = a.text
                 project_data.append({'link': link, 'title': text})
     else:
@@ -42,6 +46,7 @@ def get_project_links(soup):
         print(soup)
 
     return project_data
+
 
 def get_project_info(url):
     time.sleep(2)  # Delay for 2 seconds
@@ -65,10 +70,10 @@ def get_project_info(url):
 
     return project_info
 
+
 def main():
     # Get the webpage
-    url = "https://campus.cs.le.ac.uk/teaching/proposals/view_list.php?id=61"
-    soup = get_web_page(url)
+    soup = get_web_page(main_url)
 
     # Get project data
     project_data = get_project_links(soup)
@@ -83,6 +88,7 @@ def main():
     with open('projects.json', 'w') as f:
         print(f'Saving data to projects.json')
         json.dump(project_data, f, indent=4, sort_keys=True)
+
 
 if __name__ == '__main__':
     main()
